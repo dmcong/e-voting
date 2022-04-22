@@ -23,9 +23,6 @@ pub struct Close<'info> {
     pub proposal_token_account: Account<'info, token::TokenAccount>,
     // Wallet accounts
     #[account(
-        init_if_needed,
-        payer = authority,
-        space = Receipt::SIZE,
         seeds = [b"receipt".as_ref(), &proposal.key().to_bytes(), &authority.key().to_bytes()], 
         bump
     )]

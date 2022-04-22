@@ -49,6 +49,7 @@ pub fn exec(ctx: Context<Vote>, accepted_amount: u64, rejected_amount: u64) -> R
     if !proposal.is_active() {
         return err!(ErrorCode::NotActiveProposal);
     }
+
     proposal.accepted_power += accepted_amount;
     proposal.rejected_power += rejected_amount;
 
