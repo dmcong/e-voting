@@ -16,7 +16,6 @@ impl Proposal {
 
     pub fn is_active(&self) -> bool {
         let now = current_timestamp().unwrap_or(0);
-        msg!("now {}", now);
         if now < self.start_date {
             return false;
         }
