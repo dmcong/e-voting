@@ -50,14 +50,6 @@ pub fn exec(ctx: Context<Vote>, accepted_amount: u64, rejected_amount: u64) -> R
         return err!(ErrorCode::NotActiveProposal);
     }
 
-    proposal.accepted_power += accepted_amount;
-    proposal.rejected_power += rejected_amount;
-
-    receipt.authority = ctx.accounts.authority.key();
-    receipt.proposal = proposal.key();
-    receipt.accepted_power += accepted_amount;
-    receipt.rejected_power += rejected_amount;
-
     let transfer_ctx = CpiContext::new(
         ctx.accounts.token_program.to_account_info(),
         token::Transfer {
@@ -67,5 +59,13 @@ pub fn exec(ctx: Context<Vote>, accepted_amount: u64, rejected_amount: u64) -> R
         },
     );
     token::transfer(transfer_ctx, accepted_amount + rejected_amount)?;
+
+    proposal.accepted_power += accepted_amount;
+    proposal.rejected_power += rejected_amount;
+
+    receipt.authority = ctx.accounts.authority.key();
+    receipt.proposal = proposal.key();
+    receipt.accepted_power += accepted_amount;
+    receipt.rejected_power += rejected_amount;
     Ok(())
 }

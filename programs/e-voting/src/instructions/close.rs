@@ -52,11 +52,6 @@ pub fn exec(ctx: Context<Close>, accepted_amount: u64, rejected_amount: u64) -> 
     if rejected_amount > receipt.rejected_power {
         return err!(ErrorCode::InvalidRejectedAmount);
     }
-    proposal.accepted_power -= accepted_amount;
-    proposal.accepted_power -= rejected_amount;
-
-    receipt.accepted_power -= accepted_amount;
-    receipt.accepted_power -= rejected_amount;
 
     let seeds: &[&[&[u8]]] = &[&[
         "treasurer".as_ref(),
@@ -74,5 +69,12 @@ pub fn exec(ctx: Context<Close>, accepted_amount: u64, rejected_amount: u64) -> 
         seeds,
     );
     token::transfer(transfer_ctx, accepted_amount + rejected_amount)?;
+
+    proposal.accepted_power -= accepted_amount;
+    proposal.accepted_power -= rejected_amount;
+
+    receipt.accepted_power -= accepted_amount;
+    receipt.accepted_power -= rejected_amount;
+
     Ok(())
 }
